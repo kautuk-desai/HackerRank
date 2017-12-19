@@ -12,4 +12,4 @@ def has_cycle(head):
                 list_set.add(head.data)
                 head = head.next
         
-        return False
+        return False``
