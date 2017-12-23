@@ -1,0 +1,61 @@
+#include <map>
+#include <set>
+#include <list>
+#include <cmath>
+#include <ctime>
+#include <deque>
+#include <queue>
+#include <stack>
+#include <string>
+#include <bitset>
+#include <cstdio>
+#include <limits>
+#include <vector>
+#include <climits>
+#include <cstring>
+#include <cstdlib>
+#include <fstream>
+#include <numeric>
+#include <sstream>
+#include <iostream>
+#include <algorithm>
+#include <unordered_map>
+
+using namespace std;
+
+int lonely_integer(vector<int> a)
+{
+    set<int> occurence_set;
+    set<int>::iterator iter;
+    int lonely_int = 0;
+
+    for (auto f : a)
+    {
+        iter = occurence_set.find(f);
+        if (iter != occurence_set.end())
+        {
+            occurence_set.erase(iter);
+        }
+        else
+        {
+            occurence_set.insert(f);
+        }
+    }
+
+    iter = occurence_set.begin();
+    lonely_int = *iter;
+    return lonely_int;
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int a_i = 0; a_i < n; a_i++)
+    {
+        cin >> a[a_i];
+    }
+    cout << lonely_integer(a) << endl;
+    return 0;
+}

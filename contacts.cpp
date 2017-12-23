@@ -26,56 +26,96 @@
 using namespace std;
 const int MAX_BRANCHES = 26;
 
-struct Node{
-    struct Node* branches[MAX_BRANCHES];
-    bool isEndOfWord;
+struct Node
+{
+    struct Node *branches[MAX_BRANCHES];
+    int size = 0;
 };
 
-struct Node* initializeNode(string word){
+struct Node *initializeNode()
+{
     struct Node *node = new Node;
-    int word_length = sizeof(word) / sizeof(string);
-
+    for (int i = 0; i < MAX_BRANCHES; i++)
+    {
+        node->branches[i] = NULL;
+        node->size = 0;
+    }
     return node;
 }
 
-void insertNode(struct Node *node, string key){
-    
+void insertNode(struct Node *node, string key)
+{
+    struct Node *nodeCrawl = node;
+    int key_length = key.length();
+    int index = 0;
+    for (int i = 0; i < key_length; i++)
+    {
+        index = key[i] - 'a';
+        if (!nodeCrawl->branches[index])
+        {
+            nodeCrawl->branches[index] = initializeNode();
+        }
+
+        nodeCrawl = nodeCrawl->branches[index];
+        nodeCrawl->size += 1;
+    }
+}
+
+int search(struct Node *root, string key)
+{
+    struct Node *nodeCrawl = root;
+    int key_length = key.length();
+    int count = 0;
+    int index = 0;
+    for (int i = 0; i < key_length; i++)
+    {
+        index = key[i] - 'a';
+        if (nodeCrawl->branches[index])
+        {
+            nodeCrawl = nodeCrawl->branches[index];
+        }
+        else
+        {
+            nodeCrawl = nodeCrawl->branches[index];
+            break;
+        }
+    }
+    if (nodeCrawl)
+    {
+        count = nodeCrawl->size;
+    }
+
+    return count;
 }
 
 int main()
 {
     int n;
+    int num_contacts = 0;
     cin >> n;
+
     set<string> contacts;
-    int count = 0;
     string op = "";
     string contact = "";
-    map<string, int> contacts_count;
-
-    regex expression;
-    
+    // initialize the root node. and keep on updating the root node.
+    Node *root = initializeNode();
+    stringstream result;
 
     for (int a0 = 0; a0 < n; a0++)
     {
-        count = 0;
         cin >> op >> contact;
+
         if (op == "add")
         {
             contacts.insert(contact);
-            contacts_count[contact] = 1;
+            insertNode(root, contact);
         }
         else
         {
-            auto search = contacts_count.find(contact);
-            if(contacts_count[contact] == 1){
-                cout<<1<<endl;
-            }
-
-            else if(search != contacts_count.end()) {
-                contacts_count[contact] += 1;
-                cout<<search->second<<endl;
-            }
+            num_contacts = search(root, contact);
+            result << num_contacts << endl;
         }
     }
+    cout << result.str();
     return 0;
 }
