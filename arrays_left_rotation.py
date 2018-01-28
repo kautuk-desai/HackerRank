@@ -1,4 +1,3 @@
-
 def main():
     n, k = map(int, input().strip().split(' '))
     a = list(map(int, input().strip().split(' ')))
