@@ -32,4 +32,4 @@ var balanced_brackets = function(str){
 	}
 }
 
-balanced_brackets('{{}(');
+balanced_brackets('');
